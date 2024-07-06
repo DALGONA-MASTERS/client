@@ -10,6 +10,8 @@ import {
 } from 'react-native'
 import React from 'react'
 import { Colors } from '@/constants/Colors'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 
 export default function SignInPage() {
   const { signIn, setActive, isLoaded } = useSignIn()
@@ -43,54 +45,65 @@ export default function SignInPage() {
   }, [isLoaded, emailAddress, password])
 
   return (
-    <View style={{ backgroundColor: '#f1f1f1' }}>
+    <View style={{ backgroundColor: '#f1f1f1', height: '100%' }}>
       <Image source={require('./../../assets/images/group-1.png')} />
       <View
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 15,
         }}
       >
+        <Image
+          source={require('./../../assets/images/MainWithoutBack.png')}
+          style={{ width: 200, height: 200, marginTop: -20 }}
+        />
         <Text
           style={{
             fontFamily: 'Outfit-Bold',
             fontSize: 22,
             textAlign: 'center',
+            marginTop: 0,
           }}
         >
           Se connecter
         </Text>
-        <Image
-          source={require('./../../assets/images/MainWithoutBack.png')}
-          style={{ width: 200, height: 200 }}
-        />
       </View>
 
       <View
         style={{
-          marginTop: 0,
+          marginTop: 40,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           gap: 20,
         }}
       >
-        <TextInput
-          style={styles.login}
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Email..."
-          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-        />
-        <TextInput
-          style={styles.login}
-          value={password}
-          placeholder="Password..."
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
+        <View>
+          <Text style={{ fontFamily: 'Outfit', marginBottom: 5 }}>
+            Email ou numéro de téléphone
+          </Text>
+          <TextInput
+            style={styles.login}
+            autoCapitalize="none"
+            value={emailAddress}
+            placeholder="Email..."
+            onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          />
+        </View>
+        <View>
+          <Text style={{ fontFamily: 'Outfit', marginBottom: 5 }}>
+            Mot de passe
+          </Text>
+          <TextInput
+            style={styles.login}
+            value={password}
+            placeholder="Password..."
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+          />
+        </View>
+
         <TouchableOpacity onPress={onSignInPress} style={styles.btn}>
           <Text
             style={{
@@ -105,11 +118,56 @@ export default function SignInPage() {
         </TouchableOpacity>
       </View>
 
-      <View>
-        <Text>Don't have an account?</Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: 10,
+          marginTop: 10,
+        }}
+      >
+        <Text>Vous n’avez pas de compte ?</Text>
         <Link href="/sign-up">
-          <Text>Sign up</Text>
+          <Text style={{ color: Colors.PRIMARY, fontFamily: 'Outfit-Bold' }}>
+            Inscription
+          </Text>
         </Link>
+      </View>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 20,
+        }}
+      >
+        <View style={styles.lign}></View>
+        <Text style={{ marginHorizontal: 10, fontFamily: 'Outfit' }}>
+          Ou continuer avec
+        </Text>
+        <View style={styles.lign}></View>
+      </View>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 40,
+          marginTop: 20,
+        }}
+      >
+        <View style={styles.social}>
+          <FontAwesome5 name="facebook" size={30} color="blue" />
+        </View>
+        <View style={styles.social}>
+          <AntDesign name="google" size={30} color="red" />
+        </View>
+        <View style={styles.social}>
+          <AntDesign name="apple1" size={30} color="black" />
+        </View>
       </View>
     </View>
   )
@@ -118,14 +176,25 @@ export default function SignInPage() {
 const styles = StyleSheet.create({
   login: {
     backgroundColor: '#fff',
-    width: '80%',
+    width: 350,
     padding: 12,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#c9c9c9',
   },
   btn: {
     backgroundColor: Colors.PRIMARY,
     width: '85%',
     padding: 20,
     borderRadius: 99,
+    marginTop: 25,
+  },
+  lign: { width: 140, height: 1, borderWidth: 1, borderColor: '#c9c9c9' },
+  social: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 99,
+    borderColor: '#dadada',
+    padding: 16,
   },
 })
