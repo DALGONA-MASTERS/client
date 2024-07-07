@@ -54,16 +54,16 @@ export default function SignInPage() {
           alignItems: 'center',
         }}
       >
-        <Image
+        {/* <Image
           source={require('./../../assets/images/MainWithoutBack.png')}
-          style={{ width: 200, height: 200, marginTop: -20 }}
-        />
+          style={{ width: 200, height: 200, marginTop: -60 }}
+        /> */}
         <Text
           style={{
             fontFamily: 'Outfit-Bold',
             fontSize: 22,
             textAlign: 'center',
-            marginTop: 0,
+            marginTop: 60,
           }}
         >
           Se connecter
@@ -72,7 +72,7 @@ export default function SignInPage() {
 
       <View
         style={{
-          marginTop: 40,
+          marginTop: 60,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -140,7 +140,7 @@ export default function SignInPage() {
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: 20,
+          marginTop: 120,
         }}
       >
         <View style={styles.lign}></View>
