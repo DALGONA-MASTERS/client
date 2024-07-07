@@ -10,7 +10,7 @@ const TabLayout = () => {
       screenOptions={{
         tabBarActiveTintColor: Colors.PRIMARY,
         headerShown: false,
-        tabBarStyle: { padding: 40, height: 120, paddingBottom: 10 },
+        tabBarStyle: { padding: 15, height: 80, paddingBottom: 10 },
       }}
     >
       <Tabs.Screen
@@ -18,7 +18,7 @@ const TabLayout = () => {
         options={{
           tabBarLabel: 'Accueil',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color={color} />
+            <Ionicons name="home" size={30} color={color} />
           ),
         }}
       />
@@ -27,18 +27,18 @@ const TabLayout = () => {
         options={{
           tabBarLabel: 'Recherche',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="search-sharp" size={24} color={color} />
+            <Ionicons name="search-sharp" size={30} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="message"
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: 'Messages',
           tabBarIcon: ({ color }) => (
             <Ionicons
               name="chatbubble-ellipses-outline"
-              size={24}
+              size={30}
               color={color}
             />
           ),

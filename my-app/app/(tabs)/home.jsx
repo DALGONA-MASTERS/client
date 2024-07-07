@@ -1,14 +1,14 @@
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { View, Text, Button, StyleSheet } from 'react-native'
+import Header from '../../components/Home/Header'
 
 const Home = () => {
   const router = useRouter()
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
-      <Button title="Go to Detail" onPress={() => router.push('/sign-in')} />
+    <View style={{}}>
+      <Header />
     </View>
   )
 }
