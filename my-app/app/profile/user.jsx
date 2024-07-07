@@ -56,8 +56,8 @@ const profile = () => {
             style={{
               backgroundColor: '#e2e2e2',
               padding: 17,
-              borderTopLeftRadius: 8,
-              borderBottomLeftRadius: 8,
+              borderTopLeftRadius: 7,
+              borderBottomLeftRadius: 7,
             }}
           >
             <FontAwesome name="user" size={24} color="black" />
@@ -81,8 +81,8 @@ const profile = () => {
             style={{
               backgroundColor: '#e2e2e2',
               padding: 14,
-              borderTopLeftRadius: 8,
-              borderBottomLeftRadius: 8,
+              borderTopLeftRadius: 7,
+              borderBottomLeftRadius: 7,
             }}
           >
             <MaterialIcons name="assistant-photo" size={24} color="black" />
