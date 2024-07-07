@@ -1,8 +1,13 @@
 import React from "react";
 import "./index.css";
+import Routes from "./Routes";
 
 function App() {
-  return <div className="App">UP</div>;
+  return (
+    <div className="App">
+      <Routes />
+    </div>
+  );
 }
 
 export default App;

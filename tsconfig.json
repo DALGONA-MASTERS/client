@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "outDir": "./dist" // Add this line
+    "outDir": "./dist" 
   },
   "include": [
     "src"
