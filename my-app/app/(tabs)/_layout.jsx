@@ -10,7 +10,16 @@ const TabLayout = () => {
       screenOptions={{
         tabBarActiveTintColor: Colors.PRIMARY,
         headerShown: false,
-        tabBarStyle: { padding: 15, height: 80, paddingBottom: 10 },
+        tabBarStyle: {
+          padding: 15,
+          height: 80,
+          paddingBottom: 10,
+          shadowColor: '#000',
+          shadowOffset: { width: 2, height: -4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 5,
+          elevation: 5,
+        },
       }}
     >
       <Tabs.Screen

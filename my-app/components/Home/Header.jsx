@@ -3,6 +3,7 @@ import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { Link, useRouter } from 'expo-router'
 
 const Header = () => {
   return (
@@ -11,6 +12,11 @@ const Header = () => {
         paddingTop: 0,
         height: 100,
         backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: -4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 5,
       }}
     >
       <View
@@ -43,7 +49,9 @@ const Header = () => {
             <Ionicons name="notifications-outline" size={26} color="black" />
           </TouchableOpacity>
           <TouchableOpacity>
-            <FontAwesome6 name="circle-user" size={24} color="black" />
+            <Link href={'/profile/user'}>
+              <FontAwesome6 name="circle-user" size={24} color="black" />
+            </Link>
           </TouchableOpacity>
         </View>
       </View>
