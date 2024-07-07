@@ -22,7 +22,7 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="detail"
         options={{
           tabBarLabel: 'Explore',
           tabBarIcon: ({ color }) => (
@@ -30,7 +30,7 @@ const TabLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="profile"
         options={{
           tabBarLabel: 'Profile',
@@ -38,7 +38,7 @@ const TabLayout = () => {
             <Ionicons name="people" size={24} color={color} />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   )
 }

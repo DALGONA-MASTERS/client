@@ -28,7 +28,7 @@ const LoginScreen = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: 80,
+          marginTop: -40,
         }}
       >
         <Image
@@ -51,6 +51,10 @@ const LoginScreen = () => {
           morbi maecenas egestas eget. Arcu sed eget vitae aliquet. Mauris diam
           et id sed neque.
         </Text>
+        <Image
+          source={require('./../assets/images/eco_consicous.png')}
+          style={{ width: 450, height: 300 }}
+        />
         <TouchableOpacity onPress={onPress} style={styles.btn}>
           <Text
             style={{
@@ -102,6 +106,6 @@ const styles = StyleSheet.create({
     width: '90%',
     padding: 20,
     borderRadius: 99,
-    marginTop: 180,
+    marginTop: 20,
   },
 })

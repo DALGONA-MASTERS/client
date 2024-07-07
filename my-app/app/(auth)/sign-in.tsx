@@ -12,6 +12,7 @@ import React from 'react'
 import { Colors } from '@/constants/Colors'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function SignInPage() {
   const { signIn, setActive, isLoaded } = useSignIn()
@@ -19,6 +20,7 @@ export default function SignInPage() {
 
   const [emailAddress, setEmailAddress] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
 
   const onSignInPress = React.useCallback(async () => {
     if (!isLoaded) {
@@ -46,7 +48,6 @@ export default function SignInPage() {
 
   return (
     <View style={{ backgroundColor: '#f1f1f1', height: '100%' }}>
-      <Image source={require('./../../assets/images/group-1.png')} />
       <View
         style={{
           display: 'flex',
@@ -63,7 +64,7 @@ export default function SignInPage() {
             fontFamily: 'Outfit-Bold',
             fontSize: 22,
             textAlign: 'center',
-            marginTop: 60,
+            marginTop: '35%',
           }}
         >
           Se connecter
@@ -89,21 +90,44 @@ export default function SignInPage() {
             value={emailAddress}
             placeholder="Email..."
             onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-          />
+          ></TextInput>
         </View>
         <View>
-          <Text style={{ fontFamily: 'Outfit', marginBottom: 5 }}>
-            Mot de passe
-          </Text>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text style={{ fontFamily: 'Outfit', marginBottom: 5 }}>
+              Mot de passe
+            </Text>
+            <TouchableOpacity
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              style={{
+                position: 'relative',
+                top: 43,
+                right: 20,
+                zIndex: 10,
+              }}
+            >
+              {isPasswordVisible ? (
+                <Ionicons name="eye-off" size={24} color="black" />
+              ) : (
+                <Ionicons name="eye" size={24} color="black" />
+              )}
+            </TouchableOpacity>
+          </View>
+
           <TextInput
             style={styles.login}
             value={password}
             placeholder="Password..."
-            secureTextEntry={true}
+            secureTextEntry={isPasswordVisible}
             onChangeText={(password) => setPassword(password)}
           />
         </View>
-
         <TouchableOpacity onPress={onSignInPress} style={styles.btn}>
           <Text
             style={{
@@ -117,7 +141,6 @@ export default function SignInPage() {
           </Text>
         </TouchableOpacity>
       </View>
-
       <View
         style={{
           display: 'flex',
@@ -140,7 +163,7 @@ export default function SignInPage() {
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: 120,
+          marginTop: '45%',
         }}
       >
         <View style={styles.lign}></View>
