@@ -10,12 +10,13 @@ const TabLayout = () => {
       screenOptions={{
         tabBarActiveTintColor: Colors.PRIMARY,
         headerShown: false,
+        tabBarStyle: { padding: 40, height: 120, paddingBottom: 10 },
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Accueil',
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" size={24} color={color} />
           ),
@@ -24,21 +25,25 @@ const TabLayout = () => {
       <Tabs.Screen
         name="detail"
         options={{
-          tabBarLabel: 'Explore',
+          tabBarLabel: 'Recherche',
           tabBarIcon: ({ color }) => (
             <Ionicons name="search-sharp" size={24} color={color} />
           ),
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="people" size={24} color={color} />
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={24}
+              color={color}
+            />
           ),
         }}
-      /> */}
+      />
     </Tabs>
   )
 }
