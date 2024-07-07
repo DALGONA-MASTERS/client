@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { useSignUp } from '@clerk/clerk-expo'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import { Colors } from '@/constants/Colors'
 
 export default function SignUpScreen() {
@@ -87,7 +89,7 @@ export default function SignUpScreen() {
           </Text>
           <View
             style={{
-              marginTop: 60,
+              marginTop: 30,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -145,6 +147,59 @@ export default function SignUpScreen() {
               </Text>
             </TouchableOpacity>
           </View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              gap: 10,
+              marginTop: 10,
+            }}
+          >
+            <Text>Vous possédez déjà un compte?</Text>
+            <Link href="/sign-in">
+              <Text
+                style={{ color: Colors.PRIMARY, fontFamily: 'Outfit-Bold' }}
+              >
+                Connexion
+              </Text>
+            </Link>
+          </View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 70,
+            }}
+          >
+            <View style={styles.lign}></View>
+            <Text style={{ marginHorizontal: 10, fontFamily: 'Outfit' }}>
+              Ou continuer avec
+            </Text>
+            <View style={styles.lign}></View>
+          </View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 40,
+              marginTop: 20,
+            }}
+          >
+            <View style={styles.social}>
+              <FontAwesome5 name="facebook" size={30} color="blue" />
+            </View>
+            <View style={styles.social}>
+              <AntDesign name="google" size={30} color="red" />
+            </View>
+            <View style={styles.social}>
+              <AntDesign name="apple1" size={30} color="black" />
+            </View>
+          </View>
         </>
       )}
       {pendingVerification && (
@@ -178,5 +233,19 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 99,
     marginTop: 25,
+  },
+  social: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 99,
+    borderColor: '#dadada',
+    padding: 16,
+  },
+  lign: {
+    width: 140,
+    marginVertical: 0,
+    height: 1,
+    borderWidth: 1,
+    borderColor: '#c9c9c9',
   },
 })
