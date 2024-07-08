@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 
 import Form from "./Form";
+import { AppDispatch } from "../../app/store";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 const Authentication: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  dispatch(logout());
   const [loginPage, setLoginPage] = useState(true);
 
   const toggleForm = () => {

@@ -9,11 +9,13 @@ import {
   useRegisterUserMutation,
 } from "../../features/api/apiSlice";
 import { UserFormProps, UserFormState } from "../../types/User";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { logout, setUser } from "../../features/auth/authSlice";
 import { handleResponse } from "../../utilities/apiUtils";
 
 const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const [formState, setFormState] = useState<UserFormState>({
@@ -27,10 +29,10 @@ const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
 
   // //### Handlers
   useEffect(() => {
-    handleResponse(loginUserResult, dispatch);
+    handleResponse(loginUserResult, dispatch, navigate, "/home");
   }, [loginUserResult, dispatch]);
   useEffect(() => {
-    handleResponse(registerUserResult, dispatch);
+    handleResponse(registerUserResult, dispatch, navigate, "/");
   }, [registerUserResult, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent) => {

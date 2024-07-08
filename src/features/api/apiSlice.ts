@@ -4,7 +4,7 @@ import { User, UserCred } from '../../types/User';
 
 export const apiSlice = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8042/' }),
     endpoints: (builder) => ({
 
         //User endpoints
@@ -17,14 +17,14 @@ export const apiSlice = createApi({
         }),
         loginUser: builder.mutation<User, UserCred>({
             query: (data) => ({
-                url: "login",
+                url: "api/users/login",
                 body: data,
                 method: 'POST'
             })
         }),
         registerUser: builder.mutation<User, UserCred>({
             query: (data) => ({
-                url: "register",
+                url: "api/users/signUp",
                 body: data,
                 method: 'POST'
             })

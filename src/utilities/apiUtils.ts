@@ -1,20 +1,22 @@
 // Generic response handler
 
 import { useEffect } from "react";
-import { logout, setUser } from "../features/auth/authSlice";
-import { redirect } from "react-router-dom";
+import { logout, setToken, setUser } from "../features/auth/authSlice";
 import { AppDispatch } from "../app/store";
 
-export const handleResponse = (result: any, dispatch: AppDispatch) => {
+export const handleResponse = (result: any, dispatch: AppDispatch, navigate: Function, route: string) => {
 
     if (result.status === "fulfilled") {
+        const { token, ...userWithoutToken } = result.data;
+
         console.log("Request successful");
-        dispatch(setUser(result.data));
-        redirect("/home");
+        dispatch(setUser({ ...userWithoutToken }));
+        dispatch(setToken(token));
+        navigate(route);
     } else if (result.status === "rejected") {
         console.log("Request failed");
         dispatch(logout());
-        redirect("/");
+        navigate('/');
     } else if (result.status === "pending") {
         console.log("Pending...");
     }

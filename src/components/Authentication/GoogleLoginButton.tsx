@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { handleResponse } from "../../utilities/apiUtils";
 import { useGoogleAuthMutation } from "../../features/api/apiSlice";
 import { AppDispatch } from "../../app/store";
@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../features/auth/authSlice";
 
 const GoogleLoginButton: React.FC = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
   const [googleAuth, googleAuthResult] = useGoogleAuthMutation();
 
@@ -23,7 +25,7 @@ const GoogleLoginButton: React.FC = () => {
   };
 
   useEffect(() => {
-    handleResponse(googleAuthResult, dispatch);
+    handleResponse(googleAuthResult, dispatch, navigate, "/home");
   }, [googleAuthResult, dispatch]);
 
   const handleFailure = () => {
