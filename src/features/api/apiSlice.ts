@@ -107,4 +107,18 @@ export const apiSlice = createApi({
     }),
 });
 
-export const { useGetUserQuery, useLoginUserMutation, useGoogleAuthMutation, useRegisterUserMutation } = apiSlice;
+export const {
+    useGetUserQuery,
+    useLoginUserMutation,
+    useGoogleAuthMutation,
+    useRegisterUserMutation,
+    useAddPostMutation,
+    useGetPostsMutation,
+    useGetPostMutation,
+    useUpdatePostMutation,
+    useDeletePostMutation,
+    useLikePostMutation,
+    useAddCommentMutation,
+    useUpdateCommentMutation,
+    useDeleteCommentMutation,
+} = apiSlice;
