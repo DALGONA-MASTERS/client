@@ -35,7 +35,7 @@ function Navbar() {
   }, [isSearchOpen]);
 
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <img src="/logo.png" alt="Logo" className="h-[100%] w-[100px]" />
@@ -79,10 +79,9 @@ function Navbar() {
             <input
               type="text"
               placeholder="Search..."
-              className={`px-2 py-1 border rounded-2xl text-sm outline-none focus:ring focus:border-green-400 md:w-48 ${
+              className={`px-2 py-1 border border-green-400 rounded-2xl text-sm text-green-700 placeholder-green-700 outline-none focus:border-green-400 md:w-48 ${
                 isSearchOpen ? "block" : "hidden"
-              } md:block placeholder-green-500 border-green-400`}
-              style={{ borderColor: "green", color: "green" }}
+              } md:block`}
             />
           </div>
           <FaBell className="text-green-700 text-xl" />
