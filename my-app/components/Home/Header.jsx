@@ -36,8 +36,11 @@ const Header = () => {
         />
         <View style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
           <TouchableOpacity>
-            <Ionicons name="calendar-clear-outline" size={24} color="black" />
+            <Link href={'/evenement/events'}>
+              <Ionicons name="calendar-clear-outline" size={24} color="black" />
+            </Link>
           </TouchableOpacity>
+
           <TouchableOpacity>
             <MaterialCommunityIcons
               name="tree-outline"

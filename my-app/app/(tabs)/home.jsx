@@ -1,15 +1,23 @@
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { View, Text, Button, StyleSheet, ScrollView } from 'react-native'
 import Header from '../../components/Home/Header'
+import TypeEvent from '../../components/Home/TypeEvent'
+import TrendingEvent from '../../components/Home/TrendingEvent'
+import TrendingLocation from '../../components/Home/TrendingLocation'
+import Posts from '../../components/Home/Posts'
 
 const Home = () => {
   const router = useRouter()
 
   return (
-    <View style={{}}>
+    <ScrollView style={{}}>
       <Header />
-    </View>
+      <TypeEvent />
+      <TrendingEvent />
+      <TrendingLocation />
+      <Posts />
+    </ScrollView>
   )
 }
 
