@@ -17,6 +17,7 @@ const TrendingLocation = () => {
       title: 'lorem ipsum dolor sit',
       location: '147 Main St',
       date: '10 mai 2024',
+      nbrParticipants: '87 Pariticipants',
     },
     {
       id: 2,
@@ -24,6 +25,7 @@ const TrendingLocation = () => {
       title: 'lorem ipsum dolor ',
       location: '147 Main St',
       date: '10 mai 2024',
+      nbrParticipants: '87 Pariticipants',
     },
   ]
   return (

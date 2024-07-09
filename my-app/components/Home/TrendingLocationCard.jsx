@@ -3,6 +3,8 @@ import { Entypo } from '@expo/vector-icons'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { Colors } from '../../constants/Colors'
 import React from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const TrendingLocationCard = ({ TrendAtt }) => {
   return (
@@ -10,7 +12,7 @@ const TrendingLocationCard = ({ TrendAtt }) => {
       <View
         style={{
           backgroundColor: '#fff',
-          height: 300,
+          height: 320,
           width: 250,
           borderRadius: 10,
           padding: 10,
@@ -70,27 +72,67 @@ const TrendingLocationCard = ({ TrendAtt }) => {
               {TrendAtt.date}
             </Text>
           </View>
-          <TouchableOpacity
+          <View
             style={{
-              backgroundColor: '#de6868',
-              padding: 5,
-              borderRadius: 8,
-              width: '70%',
-              position: 'relative',
-              left: 70,
-              top: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              gap: 6,
+              marginTop: 2,
             }}
           >
+            <Ionicons name="people-sharp" size={20} color="#d63c3c" />
             <Text
               style={{
-                fontFamily: 'Outfit-Bold',
-                textAlign: 'center',
-                fontSize: 10,
+                fontFamily: 'Outfit-Med',
+                fontSize: 12,
+                color: '#1a5319',
               }}
             >
-              Plentation d'arbre
+              {TrendAtt.nbrParticipants}
             </Text>
-          </TouchableOpacity>
+          </View>
+          <View></View>
+          <View style={{ display: 'flex' }}>
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#de6868',
+                padding: 5,
+                borderRadius: 8,
+                width: '70%',
+                position: 'relative',
+                left: 70,
+                top: 15,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: 'Outfit-Bold',
+                  textAlign: 'center',
+                  fontSize: 10,
+                }}
+              >
+                Plentation d'arbre
+              </Text>
+            </TouchableOpacity>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 5,
+                position: 'relative',
+                bottom: 10,
+              }}
+            >
+              <FontAwesome6 name="share-square" size={15} color="black" />
+              <MaterialIcons
+                name="arrow-circle-right"
+                size={20}
+                color="black"
+              />
+            </View>
+          </View>
         </View>
       </View>
     </TouchableOpacity>

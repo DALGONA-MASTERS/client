@@ -5,6 +5,9 @@ import * as Font from 'expo-font'
 import React, { useEffect, useState } from 'react'
 import AppLoading from 'expo-app-loading'
 import * as SecureStore from 'expo-secure-store'
+import { Provider } from 'react-redux'
+import {persistor, store} from './../features/store'
+import { PersistGate } from 'redux-persist/integration/react'
 
 const tokenCache = {
   async getToken(key: string) {
@@ -59,14 +62,18 @@ export default function RootLayout() {
   }
   return (
     <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
-      <SignedIn>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </SignedIn>
-      <SignedOut>
-        <Slot />
-      </SignedOut>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <SignedIn>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </SignedIn>
+          <SignedOut>
+            <Slot />
+          </SignedOut>
+        </PersistGate>
+      </Provider>
     </ClerkProvider>
   )
 }

@@ -12,6 +12,14 @@ import { useRouter } from 'expo-router'
 
 const LoginScreen = () => {
   const router = useRouter()
+  // const { isSignedIn } = useAuth()
+
+  // React.useEffect(() => {
+  //   if (isSignedIn) {
+  //     router.push('/home') // Replace '/home' with your home page route
+  //   }
+  // }, [isSignedIn])
+
   const onPress = () => {
     try {
       router.push('/(auth)/sign-in')
@@ -19,6 +27,14 @@ const LoginScreen = () => {
       console.log(error)
     }
   }
+  // const router = useRouter()
+  // const onPress = () => {
+  //   try {
+  //     router.push('/(auth)/sign-in')
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <View>
