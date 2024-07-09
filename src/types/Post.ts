@@ -13,11 +13,22 @@ interface Post {
     createdAt: string;
 }
 interface Comment {
-    _id?: string;
     commenter: string;
     comment: string;
     postId: string; // Assuming each comment is linked to a post
 }
+interface CommentUi {
+    _id: string;
+    commenter: string;
+    comment: string;
+}
+interface CommentBodyEdit {
+    _id: string;
+    commenter: string;
+    comment: string;
+    postId: string
+}
+
 interface UiPost {
     _id: string;
     author: string;
@@ -25,10 +36,9 @@ interface UiPost {
     likers: string[];
     likesCount: number;
     comments: {
-        _id?: string;
+        _id: string;
         commenter: string;
         comment: string;
-        postId: string;
     }[];
     createdAt: string;
     showComments: boolean;
@@ -43,5 +53,5 @@ interface UpdatePostData {
 }
 
 export type {
-    Post, PostData, UpdatePostData, UiPost, Comment
+    Post, PostData, UpdatePostData, UiPost, Comment, CommentUi, CommentBodyEdit
 }

@@ -1,7 +1,7 @@
 // src/features/api/apiSlice.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User, UserCred } from '../../types/User';
-import { Post, PostData, UpdatePostData } from '../../types/Post'
+import { CommentBodyEdit, CommentUi, Post, PostData, UpdatePostData } from '../../types/Post'
 import { selectToken } from '../auth/authSlice';
 import { RootState } from '../../app/store';
 export const apiSlice = createApi({
@@ -103,10 +103,10 @@ export const apiSlice = createApi({
                 method: 'POST'
             })
         }),
-        updateComment: builder.mutation<Post, { postId: string, commentId: string, comment: string }>({
+        updateComment: builder.mutation<Post, CommentBodyEdit>({
             query: (data) => ({
-                url: `api/posts/${data.postId}/comments/${data.commentId}`,
-                body: data.comment,
+                url: `api/posts/${data.postId}/comments/${data._id}`,
+                body: { comment: data.comment },
                 method: 'PATCH'
             })
         }),

@@ -71,3 +71,19 @@ export const handleEditData = (result: any, dispatch: AppDispatch, editState: Fu
         console.log("Pending...");
     }
 };
+export const handleDeleteData = (result: any, dispatch: AppDispatch, deleteState: Function) => {
+
+    if (result.status === "fulfilled") {
+
+        dispatch(deleteState(result.data._id))
+
+
+        console.log("Request successful");
+
+    } else if (result.status === "rejected") {
+        console.log("Request failed");
+        // handle
+    } else if (result.status === "pending") {
+        console.log("Pending...");
+    }
+};
