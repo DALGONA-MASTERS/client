@@ -2,9 +2,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User, UserCred } from '../../types/User';
 import { Post, PostData, UpdatePostData } from '../../types/Post'
+import { selectToken } from '../auth/authSlice';
+import { RootState } from '../../app/store';
 export const apiSlice = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8042/' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:8042/',
+        prepareHeaders: (headers, { getState }) => {
+            const state = getState() as RootState; // Explicitly type the getState function
+
+            const token = selectToken(state); // Get the token from the Redux store
+            console.log(token);
+            if (token) {
+                headers.set('jwt', token);
+            }
+            return headers;
+        },
+        credentials: 'include'
+
+
+    }),
+
     endpoints: (builder) => ({
 
         //User endpoints
@@ -47,10 +65,10 @@ export const apiSlice = createApi({
                 method: 'POST'
             })
         }),
-        getPosts: builder.mutation<Post, any>({
+        getPosts: builder.mutation<Post, void>({
             query: () => ({
                 url: "api/posts/",
-                method: 'Get'
+                method: 'GET'
             })
         }),
         getPost: builder.mutation<Post, string>({
@@ -79,9 +97,9 @@ export const apiSlice = createApi({
             })
         }),
         addComment: builder.mutation<Post, { postId: string, comment: string }>({
-            query: (data) => ({
-                url: `api/posts/${data.postId}/comments`,
-                body: data.comment,
+            query: ({ postId, ...data }) => ({
+                url: `api/posts/${postId}/comments`,
+                body: { ...data },
                 method: 'POST'
             })
         }),

@@ -18,7 +18,10 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
+            console.log(action.payload)
             state.token = action.payload;
+            document.cookie = `jwt=${action.payload}; path=/; samesite=strict; secure`;
+
         },
         setUser: (state, action: PayloadAction<User | undefined>) => {
             state.user = action.payload!;

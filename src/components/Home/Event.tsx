@@ -1,6 +1,6 @@
 import React from "react";
 import { FaShare, FaSignInAlt } from "react-icons/fa";
-
+import { useGetPostMutation } from "../../features/api/apiSlice";
 function Event() {
   return (
     <div className="md:h-44 min-h-44s w-[80%] custom-border-style rounded-3xl flex mt-2">
