@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import { apiSlice } from '../features/api/apiSlice';
 import authReducer from '../features/auth/authSlice';
 import postsReducer from '../features/posts/postsSice'
+import eventsReducer from '../features/events/eventSlice'
 
 const userPersistConfig = {
     key: "auth",
@@ -19,7 +20,8 @@ export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
         auth: persistedReducer,
-        posts: postsReducer
+        posts: postsReducer,
+        events: eventsReducer
         // Add other reducers here
     },
     middleware: (getDefaultMiddleware) =>
