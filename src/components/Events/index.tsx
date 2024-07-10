@@ -4,7 +4,7 @@ import {
   useGetAllEventsMutation,
   useJoinEventMutation,
 } from "../../features/api/apiSlice";
-import { FaShareAlt } from "react-icons/fa";
+import { FaShareAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,6 +15,7 @@ import { AppDispatch } from "../../app/store";
 import { EventType } from "../../types/Event";
 import { handleFetchedData } from "../../utilities/apiUtils";
 import CreateEvent from "./CreateEvent";
+import SingleEvent from "./SingleEvent";
 
 function Events() {
   const dispatch = useDispatch<AppDispatch>();
@@ -90,6 +91,26 @@ function Events() {
 
   const formRef = useRef<HTMLDivElement>(null);
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -100,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 100,
+        behavior: "smooth",
+      });
+    }
+  };
+
   const renderEventCard = (event: EventType) => (
     <div
       key={event._id}
@@ -136,9 +157,25 @@ function Events() {
 
       <div className="w-full">
         <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
-        <div className="w-full overflow-x-auto">
-          <div className="flex space-x-4 p-4">
-            {upcomingEvents.map(renderEventCard)}
+        <div className="w-full overflow-hidden relative">
+          <div className="flex items-center space-x-2">
+            <FaChevronLeft
+              className="cursor-pointer absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
+              onClick={scrollLeft}
+            />
+            <div
+              ref={scrollContainerRef}
+              className="flex space-x-4 p-4 overflow-x-hidden"
+              style={{ scrollBehavior: "smooth" }}
+            >
+              {upcomingEvents.map((event) => (
+                <SingleEvent key={event._id} event={event} />
+              ))}
+            </div>
+            <FaChevronRight
+              className="cursor-pointer absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
+              onClick={scrollRight}
+            />
           </div>
         </div>
       </div>

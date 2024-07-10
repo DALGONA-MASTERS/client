@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCreateEventMutation } from "../../features/api/apiSlice";
 import { handleAddData } from "../../utilities/apiUtils";
 import { useDispatch } from "react-redux";
@@ -50,7 +50,6 @@ const CreateEvent: React.FC = () => {
     e.preventDefault();
     try {
       await createEvent(newEvent).unwrap();
-      alert("Event added successfully!");
       setNewEvent({
         title: "",
         startDate: "",
@@ -64,6 +63,11 @@ const CreateEvent: React.FC = () => {
       console.error("Failed to add event:", error);
     }
   };
+
+  // Handler
+  useEffect(() => {
+    handleAddData(createEventResult, dispatch, addEventData);
+  }, [createEventResult]);
 
   return (
     <div className="max-w-lg mx-auto  p-2 bg-white shadow-md rounded-md">
