@@ -8,8 +8,9 @@ interface UpdateEventData {
 }
 interface EventType {
     _id: string,
+    createdBy: string,
     image: string,
-    title: string, startDate: string, endDate: string, description: string, actionType: string, target: string, participants: string[]
+    title: string, startDate: string, endDate: string, description: string, actionType: string, target: string, participants: { _id: string }[]
 }
 
 export type { EventData, UpdateEventData, EventType }

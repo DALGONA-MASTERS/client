@@ -28,9 +28,9 @@ export const apiSlice = createApi({
 
         //User endpoints
 
-        getUser: builder.query<User, UserCred>({
+        getUser: builder.mutation<User, string>({
             query: (id) => ({
-                url: `user/${id}`,
+                url: `users/${id}`,
                 method: 'GET'
             })
         }),
@@ -188,7 +188,7 @@ export const apiSlice = createApi({
 });
 
 export const {
-    useGetUserQuery,
+    useGetUserMutation,
     useLoginUserMutation,
     useGoogleAuthMutation,
     useRegisterUserMutation,

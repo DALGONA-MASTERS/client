@@ -16,24 +16,68 @@ import { EventType } from "../../types/Event";
 import { handleFetchedData } from "../../utilities/apiUtils";
 import CreateEvent from "./CreateEvent";
 import SingleEvent from "./SingleEvent";
+import { selectUser } from "../../features/auth/authSlice";
+import EventDetails from "./EventDetails";
 
 function Events() {
+  const eventStore = useSelector(selectEvents);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch<AppDispatch>();
   const eventsStore = useSelector(selectEvents);
   const [getAllEvents, getAllEventsResult] = useGetAllEventsMutation();
   const [joinEvent, joiEventResult] = useJoinEventMutation();
   const [addEvent, addEventResult] = useCreateEventMutation();
-  const [events, setEvents] = useState<EventType[]>(eventsStore);
+  const [events, setEvents] = useState<EventType[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<EventType[]>([]);
+  const [otherEvents, setOtherEvents] = useState<EventType[]>([]);
+
+  const [pastEvents, setPastEvents] = useState<EventType[]>([]);
   const [newEvent, setNewEvent] = useState({ title: "", startDate: "" });
   const [showAddEventForm, setShowAddEventForm] = useState(false);
   const currentDate = new Date();
-  const upcomingEvents = events.filter(
-    (event) => new Date(event.startDate) > currentDate
-  );
-  const pastEvents = events.filter(
-    (event) => new Date(event.startDate) <= currentDate
-  );
-  const otherEvents: EventType[] = [];
+
+  useEffect(() => {
+    setEvents(eventStore);
+    console.log("events from store");
+  }, [eventStore]);
+
+  useEffect(() => {
+    console.log(events);
+    const filteredUpcomingEvents = events
+      .filter(
+        (event) =>
+          new Date(event.endDate) > currentDate &&
+          event.participants.some((participant) => participant._id === user!.id)
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+    setUpcomingEvents(filteredUpcomingEvents);
+
+    const filteredPastEvents = events.filter(
+      (event) => new Date(event.endDate) <= currentDate
+    );
+    setPastEvents(filteredPastEvents);
+
+    const filtredOtherEvents = events
+      .filter(
+        (event) =>
+          new Date(event.endDate) > currentDate &&
+          !event.participants.some(
+            (participant) => participant._id === user!.id
+          )
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+    setOtherEvents(filtredOtherEvents);
+  }, [events]);
+
+  useEffect(() => {
+    console.log(upcomingEvents);
+  }, [upcomingEvents]);
 
   const handleJoinEvent = async (eventId: string) => {
     try {
@@ -43,12 +87,13 @@ function Events() {
       console.error("Failed to join event:", error);
     }
   };
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
-  const handleShareEvent = (eventId: string) => {
-    const shareUrl = `${window.location.origin}/events/${eventId}`;
-    navigator.clipboard.writeText(shareUrl);
-    alert("Event link copied to clipboard!");
-  };
+  // const handleShareEvent = (eventId: string) => {
+  //   const shareUrl = `${window.location.origin}/events/${eventId}`;
+  //   navigator.clipboard.writeText(shareUrl);
+  //   alert("Event link copied to clipboard!");
+  // };
 
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,41 +156,8 @@ function Events() {
     }
   };
 
-  const renderEventCard = (event: EventType) => (
-    <div
-      key={event._id}
-      className="min-w-[200px] bg-white shadow-md rounded-md p-4 flex flex-col items-center"
-    >
-      <img
-        src={event.image || "https://via.placeholder.com/300x200"}
-        alt="Event"
-        className="w-full h-32 object-cover rounded-t-md mb-2"
-      />
-      <div className="text-gray-600 mb-1">
-        {format(new Date(event.startDate), "MMMM dd, yyyy")}
-      </div>
-      <div className="font-bold text-lg mb-1">{event.title}</div>
-      <div className="text-gray-500 mb-4">
-        {event.participants.length} participants
-      </div>
-      <button
-        onClick={() => handleJoinEvent(event._id)}
-        className="mb-2 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
-      >
-        Join Event
-      </button>
-      <button
-        onClick={() => handleShareEvent(event._id)}
-        className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-      >
-        <FaShareAlt className="inline-block mr-2" />
-        Share Event
-      </button>
-    </div>
-  );
-
   return (
-    <div className="home-container flex flex-col items-center h-full overflow-y-auto custom-scrollbar mt-[130px] space-y-8 relative">
+    <div className=" p-8 home-container flex flex-col items-center h-full overflow-y-auto custom-scrollbar mt-[130px] space-y-8 relative">
       <div className="w-full flex justify-end pr-8 absolute top-0 right-0">
         <button
           onClick={() => setShowAddEventForm(true)}
@@ -156,7 +168,7 @@ function Events() {
       </div>
 
       <div className="w-full">
-        <h2 className="text-xl font-bold mb-4">Upcoming Events</h2>
+        <h2 className="text-xl font-bold mb-4 ">My Scheduled Events</h2>
         <div className="w-full overflow-hidden relative">
           <div className="flex items-center space-x-2">
             <FaChevronLeft
@@ -165,11 +177,13 @@ function Events() {
             />
             <div
               ref={scrollContainerRef}
-              className="flex space-x-4 p-4 overflow-x-hidden"
+              className="flex space-x-4 p-4 overflow-x-auto custom-scrollbar"
               style={{ scrollBehavior: "smooth" }}
             >
               {upcomingEvents.map((event) => (
-                <SingleEvent key={event._id} event={event} />
+                <div key={event._id}>
+                  <SingleEvent key={event._id} event={event} />
+                </div>
               ))}
             </div>
             <FaChevronRight
@@ -184,22 +198,30 @@ function Events() {
         <h2 className="text-xl font-bold mb-4">Passed Events</h2>
         <div className="w-full overflow-x-auto">
           <div className="flex space-x-4 p-4">
-            {pastEvents.map(renderEventCard)}
+            {pastEvents.map((event) => (
+              <div key={event._id}>
+                <SingleEvent key={event._id} event={event} />
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="w-full">
-        <h2 className="text-xl font-bold mb-4">Other Events</h2>
-        <div className="flex flex-col space-y-4 p-4">
-          {otherEvents.map(renderEventCard)}
+        <h2 className="text-xl font-bold mb-4 w-full">Other Events</h2>
+        <div className="flex flex-row space-y-4 p-4 md:w-[100%]  items-center overflow-x-scroll custom-scrollbar">
+          {otherEvents.map((event) => (
+            <div key={event._id}>
+              <SingleEvent key={event._id} event={event} />
+            </div>
+          ))}
         </div>
       </div>
 
       {showAddEventForm && (
         <div
           ref={formRef}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
         >
           <CreateEvent />
         </div>

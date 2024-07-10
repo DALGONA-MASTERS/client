@@ -6,6 +6,7 @@ import {
 } from "../../types/Post";
 import {
   useDeleteCommentMutation,
+  useGetUserMutation,
   useUpdateCommentMutation,
 } from "../../features/api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,7 @@ import {
   editPostData,
   deleteCommentData,
 } from "../../features/posts/postsSice"; // Ensure you have the correct action for deleteCommentData
+import { User } from "../../types/User";
 
 function SingleComment({
   comment,
@@ -30,11 +32,25 @@ function SingleComment({
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.comment);
   const [showOptions, setShowOptions] = useState(false);
+  const [userData, setUserData] = useState<User | null>(null);
   const editRef = useRef<HTMLTextAreaElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null); // Ref for the options menu
 
   const [updateComment, updateCommentResult] = useUpdateCommentMutation();
   const [deleteComment, deleteCommentResult] = useDeleteCommentMutation();
+  const [getUser, getUserResult] = useGetUserMutation();
+
+  useEffect(() => {
+    getUser(comment.commenter);
+  }, []);
+  useEffect(() => {
+    if (getUserResult.status === "fulfilled") {
+      setUserData(getUserResult.data);
+    } else if (getUserResult.status === "rejected") {
+      console.log("rejected");
+    }
+    console.log("rejected");
+  }, [getUserResult]);
 
   useEffect(() => {
     handleEditData(updateCommentResult, dispatch, editPostData);
@@ -106,7 +122,7 @@ function SingleComment({
         className="h-8 w-8 rounded-full mr-2"
       />
       <div className="flex-1">
-        <div className="font-bold">User Name</div>
+        <div className="font-bold">{userData?.name || userData?.username}</div>
         {isEditing ? (
           <textarea
             ref={editRef}
