@@ -4,10 +4,12 @@ interface UserCred {
     password: string
 }
 interface User {
-    id: string,
+    token: string,
+    _id: string,
     username: string,
     email: string,
-    name?: string
+    name?: string,
+    profilePic: string
 }
 
 interface UserFormProps {

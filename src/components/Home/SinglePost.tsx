@@ -83,10 +83,11 @@ function SinglePost({ post }: { post: UiPost }) {
       return;
     }
     const newComment: CommentType = {
-      commenter: user!.id,
+      commenter: user!._id,
       comment: commentText,
       postId: post._id,
     };
+    console.log(newComment);
 
     try {
       await addComment(newComment).unwrap();
@@ -123,7 +124,7 @@ function SinglePost({ post }: { post: UiPost }) {
     }
   };
 
-  const isLikedByUser = post.likers.includes(user!.id);
+  const isLikedByUser = post.likers.includes(user!._id);
 
   return (
     <div key={post._id} className="bg-gray rounded-3xl p-4 mb-4">
@@ -148,7 +149,7 @@ function SinglePost({ post }: { post: UiPost }) {
             <div className="text-gray-700">{post.content}</div>
           )}
         </div>
-        {post.author === user!.id && (
+        {post.author === user!._id && (
           <div className="relative">
             <button
               onClick={() => setShowOptions(!showOptions)}
@@ -179,13 +180,15 @@ function SinglePost({ post }: { post: UiPost }) {
         )}
       </div>
       {/* Media */}
-      <div className="mt-2">
-        <img
-          src={"https://via.placeholder.com/300x200"}
-          alt="Post Media"
-          className="w-auto h-auto rounded-md"
-        />
-      </div>
+      {post.picture && (
+        <div className="mt-2">
+          <img
+            src={post.picture}
+            alt="Post Media"
+            className="max-w-[50%] max-h-[50%] rounded-md"
+          />
+        </div>
+      )}
       {/* Icons */}
       <div className="flex justify-around mt-4">
         <button className="flex items-center space-x-2" onClick={handleLike}>

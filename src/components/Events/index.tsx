@@ -17,7 +17,6 @@ import { handleFetchedData } from "../../utilities/apiUtils";
 import CreateEvent from "./CreateEvent";
 import SingleEvent from "./SingleEvent";
 import { selectUser } from "../../features/auth/authSlice";
-import EventDetails from "./EventDetails";
 
 function Events() {
   const eventStore = useSelector(selectEvents);
@@ -47,7 +46,9 @@ function Events() {
       .filter(
         (event) =>
           new Date(event.endDate) > currentDate &&
-          event.participants.some((participant) => participant._id === user!.id)
+          event.participants.some(
+            (participant) => participant._id === user!._id
+          )
       )
       .sort(
         (a, b) =>
@@ -65,7 +66,7 @@ function Events() {
         (event) =>
           new Date(event.endDate) > currentDate &&
           !event.participants.some(
-            (participant) => participant._id === user!.id
+            (participant) => participant._id === user!._id
           )
       )
       .sort(

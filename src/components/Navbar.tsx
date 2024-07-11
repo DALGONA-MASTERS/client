@@ -85,7 +85,9 @@ function Navbar() {
             />
           </div>
           <FaBell className="text-green-700 text-xl" />
-          <FaUserCircle className="text-green-700 text-xl" />
+          <Link to="/profil">
+            <FaUserCircle className="text-green-700 text-xl" />{" "}
+          </Link>
         </div>
         {/* Mobile Navigation Menu */}
       </div>

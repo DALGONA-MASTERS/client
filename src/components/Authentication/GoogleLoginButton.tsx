@@ -14,10 +14,10 @@ const GoogleLoginButton: React.FC = () => {
   const [googleAuth, googleAuthResult] = useGoogleAuthMutation();
 
   const handleSuccess = async (response: any) => {
-    console.log("Google login success:", response);
+    console.log("token:", response);
 
     try {
-      await googleAuth({ token: response.accessToken }).unwrap();
+      await googleAuth({ token: response.credential }).unwrap();
       redirect("/home");
     } catch (error) {
       console.error("Error authenticating with Google:", error);

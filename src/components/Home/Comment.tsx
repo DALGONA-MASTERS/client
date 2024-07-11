@@ -134,7 +134,7 @@ function SingleComment({
           <div>{comment.comment}</div>
         )}
       </div>
-      {comment.commenter === user!.id && (
+      {comment.commenter === user!._id && (
         <div className="relative">
           <button
             onClick={() => setShowOptions(!showOptions)}

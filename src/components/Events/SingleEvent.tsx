@@ -16,11 +16,12 @@ import {
   editEventData,
 } from "../../features/events/eventSlice";
 import EventDetails from "./EventDetails";
+import { useNavigate } from "react-router-dom";
 
 function SingleEvent({ event }: { event: EventType }) {
   const dispatch = useDispatch<AppDispatch>();
   const isEventActive = new Date(event.endDate) > new Date();
-
+  const navigate = useNavigate();
   const user = useSelector(selectUser);
   const [joinEvent, joinEventResult] = useJoinEventMutation();
   const [leaveEvent, leaveEventResult] = useLeaveEventMutation();
@@ -58,7 +59,7 @@ function SingleEvent({ event }: { event: EventType }) {
     setSelectedEvent(null);
   };
   const handleEventClick = (event: EventType) => {
-    setSelectedEvent(event);
+    navigate(`/events/${event._id}`);
   };
 
   // handlers
@@ -70,6 +71,9 @@ function SingleEvent({ event }: { event: EventType }) {
   useEffect(() => {
     handleEditData(leaveEventResult, dispatch, editEventData);
   }, [joinEventResult]);
+  useEffect(() => {
+    handleEditData(leaveEventResult, dispatch, editEventData);
+  }, [leaveEventResult]);
   return (
     <div
       key={event._id}
@@ -101,7 +105,7 @@ function SingleEvent({ event }: { event: EventType }) {
       </div>
       {isEventActive &&
         (!event.participants.some(
-          (participant) => participant._id === user!.id
+          (participant) => participant._id === user!._id
         ) ? (
           <button
             onClick={() => handleJoinEvent(event._id)}
@@ -140,7 +144,7 @@ function SingleEvent({ event }: { event: EventType }) {
             >
               X
             </button>
-            <EventDetails event={selectedEvent} />
+            {/* <EventDetails event={selectedEvent} /> */}
           </div>
         </div>
       )}

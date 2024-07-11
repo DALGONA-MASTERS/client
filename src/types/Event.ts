@@ -7,6 +7,7 @@ interface UpdateEventData {
     title: string, startDate: string, endDate: string, description: string, actionType: string, target: string,
 }
 interface EventType {
+    unit: 'string',
     _id: string,
     createdBy: string,
     image: string,

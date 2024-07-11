@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { FaPhotoVideo, FaVideo } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa";
 import { useAddPostMutation } from "../../features/api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
-import { handleAddData, handleFetchedData } from "../../utilities/apiUtils";
+import { handleAddData } from "../../utilities/apiUtils";
 import { AppDispatch } from "../../app/store";
 import { addPostData } from "../../features/posts/postsSice";
 
 function CreatePost() {
   const dispatch = useDispatch<AppDispatch>();
-
   const user = useSelector(selectUser);
   const [content, setContent] = useState("");
+  const [image, setImage] = useState<File | null>(null); // State to hold the selected image file
   const [addPost, addPostResult] = useAddPostMutation();
+
   useEffect(() => {
     console.log(user);
   }, [user]);
+
   const handleCreatePost = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Stop event bubbling
     e.preventDefault(); // Prevent default action
@@ -23,12 +25,20 @@ function CreatePost() {
     if (content.trim() === "") {
       return;
     }
-    const newPost = { author: user!.id, content };
+
+    const formData = new FormData();
+
+    formData.append("author", user!._id);
+    formData.append("content", content);
+    if (image) {
+      formData.append("picture", image);
+    }
 
     try {
-      console.log("Sending post:", newPost); // Log the data being sent
-      await addPost(newPost).unwrap();
+      console.log("Sending post:", formData); // Log the data being sent
+      await addPost(formData).unwrap();
       setContent(""); // Clear the input field after successful post creation
+      setImage(null); // Clear the selected image
     } catch (error) {
       console.error("Failed to create post:", error);
     }
@@ -38,6 +48,13 @@ function CreatePost() {
   useEffect(() => {
     handleAddData(addPostResult, dispatch, addPostData);
   }, [addPostResult]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
 
   return (
     <div className="h-44 w-[80%] custom-border-style rounded-3xl flex p-4 mt-2 flex-col justify-between">
@@ -55,17 +72,24 @@ function CreatePost() {
             placeholder="What's on your mind?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className=" w-full px-2 py-1 border rounded-2xl focus:outline-none focus:ring focus:border-green-300"
+            className="w-full px-2 py-1 border rounded-2xl focus:outline-none focus:ring focus:border-green-300"
           />
         </div>
       </div>
       <div className="w-full flex flex-row justify-center items-center space-y-2">
-        <button className="bg-white text-green-900 hover:bg-gray-100 px-2 py-2 rounded-full">
-          <FaPhotoVideo className="text-xl" />
-        </button>
-        <button className="bg-white text-green-900 hover:bg-gray-100 px-2 py-2 rounded-full">
+        <label
+          htmlFor="imageInput"
+          className="bg-white text-green-900 hover:bg-gray-100 px-2 py-2 rounded-full cursor-pointer"
+        >
+          <input
+            id="imageInput"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
           <FaVideo className="text-xl" />
-        </button>
+        </label>
         <button
           className="bg-green-900 text-white px-4 py-2 rounded-full ml-4"
           onClick={handleCreatePost}

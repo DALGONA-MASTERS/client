@@ -4,7 +4,7 @@ import { User, UserCred } from '../../types/User';
 import { CommentBodyEdit, CommentUi, Post, PostData, UpdatePostData } from '../../types/Post'
 import { selectToken } from '../auth/authSlice';
 import { RootState } from '../../app/store';
-import { EventData, UpdateEventData } from '../../types/Event';
+import { EventData, EventType, UpdateEventData } from '../../types/Event';
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
@@ -34,6 +34,24 @@ export const apiSlice = createApi({
                 method: 'GET'
             })
         }),
+        getUserData: builder.mutation<User, string>({
+            query: (id) => ({
+                url: `users/${id}`,
+                method: 'GET'
+            })
+        }),
+
+        updateUser: builder.mutation<User, FormData>({
+            query: (formData) => {
+                console.log("FormDD", formData, "IDD", formData.get('profilePic'))
+
+                return {
+                    url: `users/${formData.get('_id')}`, // Use the `_id` from `FormData`
+                    body: formData,
+                    method: 'PATCH',
+                }
+            },
+        }),
         loginUser: builder.mutation<User, UserCred>({
             query: (data) => ({
                 url: "users/login",
@@ -50,7 +68,15 @@ export const apiSlice = createApi({
         }),
         googleAuth: builder.mutation<User, { token: string }>({
             query: (data) => ({
-                url: "login",
+                url: "users/google-login",
+                body: data,
+                method: 'POST'
+            })
+        }),
+
+        sendA2F: builder.mutation<User, { email: string, code: string }>({
+            query: (data) => ({
+                url: "users/verify-code",
                 body: data,
                 method: 'POST'
             })
@@ -58,13 +84,19 @@ export const apiSlice = createApi({
 
 
 
+
         //Posts
-        addPost: builder.mutation<Post, PostData>({
-            query: (data) => ({
-                url: "posts/",
-                body: data,
-                method: 'POST'
-            })
+        addPost: builder.mutation<Post, FormData>({
+            query: (data) => {
+
+                console.log(data)
+
+                return {
+                    url: "posts/",
+                    body: data,
+                    method: 'POST'
+                }
+            }
         }),
         getPosts: builder.mutation<Post, void>({
             query: () => ({
@@ -127,9 +159,15 @@ export const apiSlice = createApi({
                 method: 'POST',
             }),
         }),
-        getAllEvents: builder.mutation<Event[], void>({
+        getAllEvents: builder.mutation<EventType[], void>({
             query: () => ({
                 url: 'events/',
+                method: 'GET',
+            }),
+        }),
+        getGetEvent: builder.mutation<EventType, string>({
+            query: (id) => ({
+                url: `events/${id}`,
                 method: 'GET',
             }),
         }),
@@ -181,6 +219,55 @@ export const apiSlice = createApi({
 
 
 
+        //Contributions
+        addContribution: builder.mutation<void, { eventId: string; value: number }>({
+            query: (data) => ({
+                url: `contributions/`,
+                body: data,
+                method: 'POST',
+            }),
+        }),
+        editContribution: builder.mutation<void, { contributionId: string; value: number }>({
+            query: (data) => ({
+                url: `contributions/${data.contributionId}`,
+                body: data,
+                method: 'PATCH',
+            }),
+        }),
+        validateContribution: builder.mutation<void, { contributionId: string; value: number }>({
+            query: (data) => ({
+                url: `contributions/validate/${data.contributionId}`,
+                body: data,
+                method: 'POST',
+            }),
+        }),
+        getUsersContribution: builder.mutation<void, void>({
+            query: (data) => ({
+                url: `contributions/user`,
+                method: 'GET',
+            }),
+        }),
+        getAllContribution: builder.mutation<void, void>({
+            query: (data) => ({
+                url: `contributions/`,
+                method: 'GET',
+            }),
+        }),
+        getStats: builder.mutation<any, void>({
+            query: () => ({
+                url: `stats/`,
+                method: 'GET',
+            }),
+        }),
+
+
+
+
+
+
+
+
+
 
 
 
@@ -210,6 +297,17 @@ export const {
     useLeaveEventMutation,
     useUnblockParticipantMutation,
     useUpdateEventMutation,
+    useUpdateUserMutation,
+    useGetUserDataMutation,
+    useSendA2FMutation,
+    useGetGetEventMutation,
+    useAddContributionMutation,
+    useEditContributionMutation,
+    useGetAllContributionMutation,
+    useGetUsersContributionMutation,
+    useGetStatsMutation,
+    useValidateContributionMutation,
+
 
 
 } = apiSlice;

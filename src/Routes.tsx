@@ -13,12 +13,16 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Events from "./components/Events";
 import Stats from "./components/Stats";
+import Profil from "./components/Profil";
+import CodePage from "./components/CodePage";
+import EventDetailsPage from "./components/Events/EventDetailsPage";
 
 const Routes: React.FC = () => {
   return (
     <Router>
       <AllRoutes>
         <Route path="/" element={<Authentication />} />
+        <Route path="/code/:email" element={<CodePage />} />
         <Route
           path="/home"
           element={
@@ -53,6 +57,29 @@ const Routes: React.FC = () => {
                 <>
                   <Navbar />
                   <Stats />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/events/:eventId"
+          element={
+            <>
+              <Navbar />
+              <EventDetailsPage />
+            </>
+          }
+        />
+
+        <Route
+          path="/profil"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <Navbar />
+                  <Profil />
                 </>
               }
             />

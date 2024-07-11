@@ -32,7 +32,12 @@ const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
     handleResponse(loginUserResult, dispatch, navigate, "/home");
   }, [loginUserResult, dispatch]);
   useEffect(() => {
-    handleResponse(registerUserResult, dispatch, navigate, "/");
+    handleResponse(
+      registerUserResult,
+      dispatch,
+      navigate,
+      `/code/${formState.email}`
+    );
   }, [registerUserResult, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,7 +73,7 @@ const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               type="text"
               id="name"
-              name="name"
+              name="username"
               value={formState.name}
               onChange={handleChange}
               required={!loginPage}

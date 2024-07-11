@@ -30,6 +30,7 @@ interface CommentBodyEdit {
 }
 
 interface UiPost {
+    picture: string,
     _id: string;
     author: string;
     content: string;
