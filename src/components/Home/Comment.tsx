@@ -117,7 +117,7 @@ function SingleComment({
   return (
     <div key={comment._id} className="flex items-start mb-2 relative">
       <img
-        src={"https://via.placeholder.com/50"}
+        src={userData?.profilePic || "https://via.placeholder.com/50"}
         alt="Profile"
         className="h-8 w-8 rounded-full mr-2"
       />

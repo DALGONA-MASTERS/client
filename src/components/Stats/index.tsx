@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { useGetStatsMutation } from "../../features/api/apiSlice";
+import {
+  useGetMounthStatsMutation,
+  useGetStatsMutation,
+} from "../../features/api/apiSlice";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -8,12 +11,24 @@ Chart.register(ArcElement, Tooltip, Legend);
 
 function Stats() {
   const [getStats, getStatsResult] = useGetStatsMutation();
+  const [getMounthState, getMounthStateResult] = useGetMounthStatsMutation();
 
   useEffect(() => {
     getStats();
-  }, []);
+  }, [getStats]);
 
-  if (!getStatsResult.isSuccess) {
+  useEffect(() => {
+    if (getStatsResult.isSuccess) {
+      const actionTypes = [
+        "trees_plantation",
+        "waste_recycling",
+        "beach_cleaning",
+      ];
+      actionTypes.forEach((type) => getMounthState(type));
+    }
+  }, [getStatsResult, getMounthState]);
+
+  if (!getStatsResult.isSuccess || !getMounthStateResult.isSuccess) {
     return <div>Loading...</div>;
   }
 
@@ -24,7 +39,7 @@ function Stats() {
     datasets: [
       {
         label: `${label} Progress`,
-        data: [action.progress, action.target - action.progress],
+        data: [action?.progress, action?.target - action?.progress],
         backgroundColor: ["green", "#FF6384"],
         hoverBackgroundColor: ["#36A2EB", "#FF6384"],
       },

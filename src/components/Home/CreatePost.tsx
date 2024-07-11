@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FaVideo } from "react-icons/fa";
-import { useAddPostMutation } from "../../features/api/apiSlice";
+import { FaImage, FaVideo } from "react-icons/fa";
+import {
+  useAddPostMutation,
+  useGetUserDataMutation,
+} from "../../features/api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
 import { handleAddData } from "../../utilities/apiUtils";
@@ -8,8 +11,24 @@ import { AppDispatch } from "../../app/store";
 import { addPostData } from "../../features/posts/postsSice";
 
 function CreatePost() {
-  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
+
+  const [userData, setUserData] = useState<any | null>(null);
+  const [getUserData, getUserDataResult] = useGetUserDataMutation();
+  useEffect(() => {
+    if (user?._id) {
+      getUserData(user?._id);
+    }
+  }, [user?._id, getUserData]);
+  useEffect(() => {
+    if (getUserDataResult.isSuccess && getUserDataResult.data) {
+      setUserData(getUserDataResult.data);
+    } else if (getUserDataResult.isError) {
+      console.error("Error fetching user", getUserDataResult.error);
+    }
+  }, [getUserDataResult]);
+
+  const dispatch = useDispatch<AppDispatch>();
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null); // State to hold the selected image file
   const [addPost, addPostResult] = useAddPostMutation();
@@ -61,7 +80,7 @@ function CreatePost() {
       <div className="flex flex-row items-center space-x-2">
         <div className="w-auto flex items-center">
           <img
-            src="https://via.placeholder.com/100"
+            src={userData?.profilePic || "https://via.placeholder.com/100"}
             alt="Profile"
             className="h-12 w-12 rounded-full"
           />
@@ -88,7 +107,7 @@ function CreatePost() {
             onChange={handleImageChange}
             className="hidden"
           />
-          <FaVideo className="text-xl" />
+          <FaImage className="text-xl" />
         </label>
         <button
           className="bg-green-900 text-white px-4 py-2 rounded-full ml-4"

@@ -5,6 +5,7 @@ import {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useDeletePostMutation,
+  useGetUserDataMutation,
   useLikePostMutation,
   useUpdateCommentMutation,
   useUpdatePostMutation,
@@ -21,6 +22,22 @@ import { selectUser } from "../../features/auth/authSlice";
 import SingleComment from "./Comment";
 
 function SinglePost({ post }: { post: UiPost }) {
+  const [userData, setUserData] = useState<any | null>(null);
+  const userId = post.author;
+  const [getUserData, getUserDataResult] = useGetUserDataMutation();
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId);
+    }
+  }, [userId, getUserData]);
+  useEffect(() => {
+    if (getUserDataResult.isSuccess && getUserDataResult.data) {
+      setUserData(getUserDataResult.data);
+    } else if (getUserDataResult.isError) {
+      console.error("Error fetching user", getUserDataResult.error);
+    }
+  }, [getUserDataResult]);
+
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
   const [commentText, setCommentText] = useState("");
@@ -32,8 +49,6 @@ function SinglePost({ post }: { post: UiPost }) {
   const [addComment, addCommentResult] = useAddCommentMutation();
   const [updatePost, updatePostResult] = useUpdatePostMutation();
   const [deletePost, deletePostResult] = useDeletePostMutation();
-  const [deleteComment, deleteCommentResult] = useDeleteCommentMutation();
-  const [updateComment, updateCommentResult] = useUpdateCommentMutation();
 
   const editRef = useRef<HTMLTextAreaElement>(null);
 
@@ -123,6 +138,9 @@ function SinglePost({ post }: { post: UiPost }) {
       console.error("Failed to delete post:", error);
     }
   };
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   const isLikedByUser = post.likers.includes(user!._id);
 
@@ -131,13 +149,13 @@ function SinglePost({ post }: { post: UiPost }) {
       {/* Profile Picture */}
       <div className="flex items-start mb-2 relative">
         <img
-          src={"https://via.placeholder.com/50"}
+          src={userData?.profilePic || "https://via.placeholder.com/50"}
           alt="Profile"
           className="h-12 w-12 rounded-full mr-4"
         />
         {/* Content */}
         <div className="flex-1">
-          <div className="font-bold text-lg mb-2">User Name</div>
+          <div className="font-bold text-lg mb-2">{userData?.username}</div>
           {isEditing ? (
             <textarea
               ref={editRef}

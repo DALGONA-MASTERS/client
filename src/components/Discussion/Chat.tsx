@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
 import { User } from "../../types/User";
+import { FaMicrophone } from "react-icons/fa";
 
 function Chat() {
   const user = useSelector(selectUser);
@@ -66,8 +67,12 @@ function Chat() {
     }
   };
 
-  const handleStartRecording = () => {
-    setRecording(true);
+  const handleMicClick = () => {
+    if (recording) {
+      setRecording(false);
+    } else {
+      setRecording(true);
+    }
   };
 
   const handleStopRecording = (recordedBlob: ReactMicStopEvent) => {
@@ -121,8 +126,8 @@ function Chat() {
               key={message._id}
               className={`message-item p-2 my-2 rounded-md ${
                 message.sender === user?._id
-                  ? "bg-green-200 self-end"
-                  : "bg-gray-200 self-start"
+                  ? "bg-green-400 self-start"
+                  : "bg-green-200 self-end"
               }`}
             >
               {message.content ? (
@@ -147,6 +152,14 @@ function Chat() {
           >
             Send
           </button>
+          <button
+            onClick={handleMicClick}
+            className={`${
+              recording ? "bg-red-600" : "bg-green-600"
+            } text-white px-4 py-2 rounded-md ml-2`}
+          >
+            <FaMicrophone />
+          </button>
         </div>
         <div className="voice-message-input flex items-center mt-4">
           <ReactMic
@@ -155,18 +168,6 @@ function Chat() {
             onStop={handleStopRecording}
             mimeType="audio/webm"
           />
-          <button
-            onClick={handleStartRecording}
-            className="bg-green-600 text-white px-4 py-2 rounded-md ml-2"
-          >
-            Start Recording
-          </button>
-          <button
-            onClick={() => setRecording(false)}
-            className="bg-red-600 text-white px-4 py-2 rounded-md ml-2"
-          >
-            Stop Recording
-          </button>
         </div>
       </div>
     </div>

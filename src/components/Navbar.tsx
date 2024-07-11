@@ -22,6 +22,7 @@ function Navbar() {
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
   };
+
   // request to handle the search for an event
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ function Navbar() {
       }
     }
   };
+
   useEffect(() => {
     const closeSearchOnOutsideClick = (event: MouseEvent) => {
       if (
@@ -70,9 +72,15 @@ function Navbar() {
           <img src="/logo.png" alt="Logo" className="h-[100%] w-[100px]" />
         </div>
         <div className="md:hidden flex items-center space-x-4">
-          <FaHome className="text-green-700 text-xl" />
-          <FaCalendarAlt className="text-green-700 text-xl" />
-          <FaChartLine className="text-green-700 text-xl" />
+          <Link to="/home">
+            <FaHome className="text-green-700 text-xl" />
+          </Link>
+          <Link to="/events">
+            <FaCalendarAlt className="text-green-700 text-xl" />
+          </Link>
+          <Link to="/stats">
+            <FaChartLine className="text-green-700 text-xl" />
+          </Link>
         </div>
         <div className="hidden md:flex items-center space-x-8">
           <Link
@@ -104,11 +112,11 @@ function Navbar() {
             handleSearch={handleSearch}
           />
           <Link to="/discussion">
-            <FaFacebookMessenger className="text-green-700 text-xl" />{" "}
+            <FaFacebookMessenger className="text-green-700 text-xl" />
           </Link>
           <FaBell className="text-green-700 text-xl" />
           <Link to="/profil">
-            <FaUserCircle className="text-green-700 text-xl" />{" "}
+            <FaUserCircle className="text-green-700 text-xl" />
           </Link>
         </div>
         {/* Mobile Navigation Menu */}

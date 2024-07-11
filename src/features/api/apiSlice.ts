@@ -267,6 +267,16 @@ export const apiSlice = createApi({
                 method: 'GET',
             }),
         }),
+        getMounthStats: builder.mutation<any, string>({
+            query: (data) => {
+
+                console.log(data)
+                return {
+                    url: `contributions/actionType/${data}/monthly`,
+                    method: 'GET',
+                }
+            },
+        }),
 
 
         // Messages
@@ -349,6 +359,7 @@ export const {
     useGetMessagesMutation,
     useSaveMessageMutation,
     useSaveVoiceMessageMutation,
+    useGetMounthStatsMutation
 
 
 

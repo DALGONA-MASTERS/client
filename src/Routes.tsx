@@ -90,7 +90,6 @@ const Routes: React.FC = () => {
             />
           }
         />
-
         <Route
           path="/profil"
           element={

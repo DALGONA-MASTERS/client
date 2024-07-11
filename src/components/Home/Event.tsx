@@ -1,41 +1,191 @@
-import React from "react";
-import { FaShare, FaSignInAlt } from "react-icons/fa";
-import { useGetPostMutation } from "../../features/api/apiSlice";
-function Event() {
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { ReactMic, ReactMicStopEvent } from "react-mic";
+import {
+  useGetMessagesMutation,
+  useSaveMessageMutation,
+  useGetUserDataMutation,
+  useSaveVoiceMessageMutation,
+} from "../../features/api/apiSlice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
+import { User } from "../../types/User";
+
+function Chat() {
+  const user = useSelector(selectUser);
+  const { userId } = useParams<{ userId: string }>();
+  const [getMessages, getMessagesResult] = useGetMessagesMutation();
+  const [sendMessage] = useSaveMessageMutation();
+  const [sendVoiceMessage] = useSaveVoiceMessageMutation();
+  const [getUserData, getUserDataResult] = useGetUserDataMutation();
+  const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [userReceiver, setUserReceiver] = useState<User | null>(null);
+  const [recording, setRecording] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId);
+    }
+  }, [userId, getUserData]);
+
+  useEffect(() => {
+    if (getUserDataResult.isSuccess && getUserDataResult.data) {
+      setUserReceiver(getUserDataResult.data);
+    } else if (getUserDataResult.isError) {
+      console.error("Error fetching user", getUserDataResult.error);
+    }
+  }, [getUserDataResult]);
+
+  useEffect(() => {
+    if (userId) {
+      getMessages(userId);
+    }
+  }, [userId, getMessages]);
+
+  useEffect(() => {
+    if (getMessagesResult.status === "fulfilled") {
+      setMessages(getMessagesResult.data);
+    } else if (getMessagesResult.status === "rejected") {
+      console.error(getMessagesResult.error);
+    }
+  }, [getMessagesResult]);
+
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === "") return;
+
+    try {
+      await sendMessage({ receiverId: userId!, content: newMessage });
+      setMessages([
+        ...messages,
+        { _id: Date.now(), content: newMessage, sender: user?._id },
+      ]);
+      setNewMessage("");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  };
+
+  const handleStartRecording = () => {
+    setRecording(true);
+  };
+
+  const handleStopRecording = (recordedBlob: ReactMicStopEvent) => {
+    setRecording(false);
+    handleSendVoiceMessage(recordedBlob.blob);
+  };
+
+  const handleSendVoiceMessage = async (audioBlob: Blob) => {
+    try {
+      const formData = new FormData();
+      formData.append("receiverId", userId!);
+      formData.append("audio", audioBlob, "voice-message.webm");
+
+      await sendVoiceMessage(formData);
+      setMessages([
+        ...messages,
+        {
+          _id: Date.now(),
+          audio: URL.createObjectURL(audioBlob),
+          sender: user?._id,
+        },
+      ]);
+    } catch (error) {
+      console.error("Failed to send voice message:", error);
+    }
+  };
+
+  const handleLinkClick = (url: string) => {
+    const eventId = url.split("/").pop();
+    console.log(eventId);
+    navigate(`/events/${eventId}`);
+  };
+
   return (
-    <div className="md:h-44 min-h-44s w-[80%] custom-border-style rounded-3xl flex mt-2">
-      {/* Left part */}
-      <div className="flex flex-col justify-around items-start w-1/2 p-4">
-        <div className="font-bold font-inter text-green-900 text-sm sm:text-base md:text-lg">
-          Lundi, 21 Juillet 2024 · 14:00
-        </div>
-        <div className="text-lg sm:text-xl font-extrabold font-inter text-black">
-          Plantation d'arbre pour creer une foret
-        </div>
-        <div className="font-bold font-inter text-green-900 text-sm sm:text-base md:text-lg">
-          50 Participants
-        </div>
+    <div className="chat-container flex flex-col md:flex-row items-center h-full overflow-y-auto custom-scrollbar mt-[130px]">
+      <div className="w-full md:w-1/3 p-4 flex flex-col items-center">
+        {userReceiver && (
+          <>
+            <img
+              src={userReceiver.profilePic}
+              alt="profilePic"
+              className="rounded-[20px] w-[200px] h-[200px] mb-4"
+            />
+            <h3 className="text-xl font-semibold">{userReceiver.username}</h3>
+            {userReceiver.name && (
+              <p className="text-gray-600">{userReceiver.name}</p>
+            )}
+            <p className="text-gray-600">{userReceiver.email}</p>
+          </>
+        )}
       </div>
-      {/* Right part */}
-      <div className="flex w-1/2 p-4 md:flex-row flex-col justify-center items-center">
-        <img
-          src="https://via.placeholder.com/100"
-          alt="Event"
-          className="w-[80%] md:w-1/3 h-auto rounded-md"
-        />
-        <div className="flex md:flex-col flex-row  justify-center items-center w-2/3 md:space-y-2 mt-2 md:mt-0 ">
-          {/* For small screens, show icons; for larger screens, show buttons */}
-          <button className="bg-green-900 text-white p-2 rounded-md md:hidden">
-            <FaShare className="text-xl" />
+
+      <div className="messages-section w-full md:w-2/3 p-4 flex flex-col">
+        <div className="messages-list flex-1 overflow-y-auto mb-4">
+          {messages.map((message) => (
+            <div
+              key={message._id}
+              className={`message-item p-2 my-2 rounded-md ${
+                message.sender === user?._id
+                  ? "bg-green-200 self-end"
+                  : "bg-gray-200 self-start"
+              }`}
+            >
+              {message.content ? (
+                message.content.match(/^http/) ? (
+                  <Link
+                    to={message.content}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLinkClick(message.content);
+                    }}
+                    className="text-blue-500 underline"
+                  >
+                    {message.content}
+                  </Link>
+                ) : (
+                  <p>{message.content}</p>
+                )
+              ) : (
+                <audio controls src={message.audio}></audio>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="message-input flex items-center mt-4">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            className="border rounded-md p-2 flex-1"
+            placeholder="Type a message"
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md ml-2"
+          >
+            Send
           </button>
-          <button className="bg-blue-500 text-white p-2 rounded-md md:hidden">
-            <FaSignInAlt className="text-xl" />
+        </div>
+        <div className="voice-message-input flex items-center mt-4">
+          <ReactMic
+            record={recording}
+            className="sound-wave"
+            onStop={handleStopRecording}
+            mimeType="audio/webm"
+          />
+          <button
+            onClick={handleStartRecording}
+            className="bg-green-600 text-white px-4 py-2 rounded-md ml-2"
+          >
+            Start Recording
           </button>
-          <button className="hidden md:block bg-green-900 text-white px-4 py-2 rounded-md">
-            Partager cet événement
-          </button>
-          <button className="hidden md:block bg-blue-500 text-white px-4 py-2 rounded-md">
-            Rejoindre cet événement
+          <button
+            onClick={() => setRecording(false)}
+            className="bg-red-600 text-white px-4 py-2 rounded-md ml-2"
+          >
+            Stop Recording
           </button>
         </div>
       </div>
@@ -43,4 +193,4 @@ function Event() {
   );
 }
 
-export default Event;
+export default Chat;
