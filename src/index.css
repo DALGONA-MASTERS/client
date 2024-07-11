@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
   overflow: hidden; /* Prevent overflow on the body */
@@ -40,10 +40,9 @@ body, html {
 
   /* Allow vertical scrolling when content overflows */
   overflow-y: auto;
-
-
 }
-.hidescroll{
-
-
+.hidescroll {
+}
+input:focus {
+  outline: none;
 }

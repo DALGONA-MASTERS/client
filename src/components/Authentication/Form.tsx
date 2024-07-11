@@ -21,7 +21,7 @@ const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
   const [formState, setFormState] = useState<UserFormState>({
     email: "",
     password: "",
-    name: undefined,
+    username: "",
   });
 
   const [loginUser, loginUserResult] = useLoginUserMutation();
@@ -67,9 +67,15 @@ const Form: React.FC<UserFormProps> = ({ loginPage, toggleForm }) => {
             <input
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               type="text"
+<<<<<<< Updated upstream
               id="name"
               name="name"
               value={formState.name}
+=======
+              id="username"
+              name="username"
+              value={formState.username}
+>>>>>>> Stashed changes
               onChange={handleChange}
               required={!loginPage}
             />

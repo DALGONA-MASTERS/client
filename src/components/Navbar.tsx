@@ -8,15 +8,43 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import SearchEvent from "./searchEvents";
+import { log } from "console";
 
 function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
+  const [searchResults, setSearchResults] = useState([]);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
   };
-
+  // request to handle the search for an event
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Perform search logic here
+    console.log(`Searching for: ${searchTerm}`);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}events/search?query=${searchTerm}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      setSearchResults(response.data);
+      setSearchTerm("");
+      setIsSearchOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error searching for events:" + error.message);
+      } else {
+        console.error("An unknown error occurred while searching for events.");
+      }
+    }
+  };
   useEffect(() => {
     const closeSearchOnOutsideClick = (event: MouseEvent) => {
       if (
@@ -69,25 +97,14 @@ function Navbar() {
           </Link>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="relative flex items-center" ref={searchRef}>
-            <div
-              className="block md:hidden cursor-pointer"
-              onClick={toggleSearch}
-            >
-              <FaSearch className="text-green-700 text-xl" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              className={`px-2 py-1 border border-green-400 rounded-2xl text-sm text-green-700 placeholder-green-700 outline-none focus:border-green-400 md:w-48 ${
-                isSearchOpen ? "block" : "hidden"
-              } md:block`}
-            />
-          </div>
+          <SearchEvent
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            handleSearch={handleSearch}
+          />
           <FaBell className="text-green-700 text-xl" />
           <FaUserCircle className="text-green-700 text-xl" />
         </div>
-        {/* Mobile Navigation Menu */}
       </div>
     </nav>
   );
