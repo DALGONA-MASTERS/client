@@ -127,7 +127,7 @@ function SinglePost({ post }: { post: UiPost }) {
   const isLikedByUser = post.likers.includes(user!._id);
 
   return (
-    <div key={post._id} className="bg-gray rounded-3xl p-4 mb-4">
+    <div key={post._id} className="bg-green-200 rounded-3xl p-4 mb-4">
       {/* Profile Picture */}
       <div className="flex items-start mb-2 relative">
         <img

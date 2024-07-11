@@ -60,7 +60,7 @@ function EventDetails({ event }: { event: EventType }) {
         <img
           className="w-full h-auto rounded-md"
           alt="event-img"
-          src={"https://via.placeholder.com/300x200"}
+          src={event.picture || "https://via.placeholder.com/300x200"}
         />
       </div>
       <div className="text-gray-800 mb-6">

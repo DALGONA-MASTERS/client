@@ -16,6 +16,8 @@ import Stats from "./components/Stats";
 import Profil from "./components/Profil";
 import CodePage from "./components/CodePage";
 import EventDetailsPage from "./components/Events/EventDetailsPage";
+import Discussion from "./components/Discussion";
+import Chat from "./components/Discussion/Chat";
 
 const Routes: React.FC = () => {
   return (
@@ -63,12 +65,29 @@ const Routes: React.FC = () => {
           }
         />
         <Route
-          path="/events/:eventId"
+          path="/discussion"
           element={
-            <>
-              <Navbar />
-              <EventDetailsPage />
-            </>
+            <ProtectedRoute
+              element={
+                <>
+                  <Navbar />
+                  <Discussion />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/discussion/:userId"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <Navbar />
+                  <Chat />
+                </>
+              }
+            />
           }
         />
 
@@ -83,6 +102,15 @@ const Routes: React.FC = () => {
                 </>
               }
             />
+          }
+        />
+        <Route
+          path="/events/:eventId"
+          element={
+            <>
+              <Navbar />
+              <EventDetailsPage />
+            </>
           }
         />
       </AllRoutes>

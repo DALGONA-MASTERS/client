@@ -96,18 +96,6 @@ function Events() {
   //   alert("Event link copied to clipboard!");
   // };
 
-  const handleAddEvent = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await addEvent(newEvent).unwrap();
-      alert("Event added successfully!");
-      setNewEvent({ title: "", startDate: "" });
-      setShowAddEventForm(false);
-    } catch (error) {
-      console.error("Failed to add event:", error);
-    }
-  };
-
   useEffect(() => {
     getAllEvents();
   }, []);

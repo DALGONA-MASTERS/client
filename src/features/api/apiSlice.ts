@@ -152,7 +152,7 @@ export const apiSlice = createApi({
 
 
         // Events
-        createEvent: builder.mutation<Event, { title: string, startDate: string }>({
+        createEvent: builder.mutation<Event, FormData>({
             query: (data) => ({
                 url: 'events/',
                 body: data,
@@ -247,6 +247,14 @@ export const apiSlice = createApi({
                 method: 'GET',
             }),
         }),
+
+        getUsers: builder.mutation<User[], void>({
+            query: (data) => ({
+                url: `users/getAll`,
+                method: 'GET',
+            }),
+        }),
+
         getAllContribution: builder.mutation<void, void>({
             query: (data) => ({
                 url: `contributions/`,
@@ -258,6 +266,36 @@ export const apiSlice = createApi({
                 url: `stats/`,
                 method: 'GET',
             }),
+        }),
+
+
+        // Messages
+        getMessages: builder.mutation({
+            query: (userId) => ({
+                url: `messages/${userId}`,
+                method: 'GET',
+            }),
+        }),
+        saveMessage: builder.mutation<any, { receiverId: string, content: string }>({
+            query: ({ receiverId, content }) => {
+                return {
+                    url: `messages/send`,
+                    method: 'POST',
+                    body: { receiverId, content }
+                }
+            }
+
+        }),
+        saveVoiceMessage: builder.mutation<any, FormData>({
+            query: (data) => {
+
+                return {
+                    url: `messages/send`,
+                    method: 'POST',
+                    body: data
+                }
+            }
+
         }),
 
 
@@ -302,11 +340,15 @@ export const {
     useSendA2FMutation,
     useGetGetEventMutation,
     useAddContributionMutation,
+    useGetUsersMutation,
     useEditContributionMutation,
     useGetAllContributionMutation,
     useGetUsersContributionMutation,
     useGetStatsMutation,
     useValidateContributionMutation,
+    useGetMessagesMutation,
+    useSaveMessageMutation,
+    useSaveVoiceMessageMutation,
 
 
 

@@ -10,7 +10,7 @@ interface EventType {
     unit: 'string',
     _id: string,
     createdBy: string,
-    image: string,
+    picture: string,
     title: string, startDate: string, endDate: string, description: string, actionType: string, target: string, participants: { _id: string }[]
 }
 

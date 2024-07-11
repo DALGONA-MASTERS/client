@@ -16,7 +16,7 @@ interface NewEvent {
     | "beach_cleaning"
     | "other";
   target: string;
-  image?: string;
+  image?: File | null; // Optional image field
 }
 
 const CreateEvent: React.FC = () => {
@@ -29,14 +29,17 @@ const CreateEvent: React.FC = () => {
     description: "",
     actionType: "trees_plantation",
     target: "",
-    image: "", // Optional: Add image URL field
+    image: null, // Initialize image as null
   });
 
   const [createEvent, createEventResult] = useCreateEventMutation();
 
   const handleInputChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | HTMLSelectElement
+      | HTMLInputElement
     >
   ) => {
     const { name, value } = e.target;
@@ -46,10 +49,32 @@ const CreateEvent: React.FC = () => {
     }));
   };
 
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setNewEvent((prevEvent) => ({
+        ...prevEvent,
+        image: file,
+      }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", newEvent.title);
+    formData.append("startDate", newEvent.startDate);
+    formData.append("endDate", newEvent.endDate);
+    formData.append("description", newEvent.description);
+    formData.append("actionType", newEvent.actionType);
+    formData.append("target", newEvent.target);
+    if (newEvent.image) {
+      formData.append("picture", newEvent.image);
+    }
+
     try {
-      await createEvent(newEvent).unwrap();
+      await createEvent(formData).unwrap();
       setNewEvent({
         title: "",
         startDate: "",
@@ -57,22 +82,23 @@ const CreateEvent: React.FC = () => {
         description: "",
         actionType: "trees_plantation",
         target: "",
-        image: "",
+        image: null, // Clear the image file state after submission
       });
     } catch (error) {
       console.error("Failed to add event:", error);
     }
   };
 
-  // Handler
+  // Handler for API response
   useEffect(() => {
     handleAddData(createEventResult, dispatch, addEventData);
   }, [createEventResult]);
 
   return (
-    <div className="max-w-lg mx-auto  p-2 bg-white shadow-md rounded-md">
+    <div className="max-w-lg mx-auto p-2 bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Add Event</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Title Input */}
         <div>
           <label htmlFor="title" className="block text-gray-700">
             Title
@@ -87,7 +113,9 @@ const CreateEvent: React.FC = () => {
             required
           />
         </div>
-        <div className="w-full flex flex-row">
+
+        {/* Start Date and End Date Inputs */}
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="startDate" className="block text-gray-700">
               Start Date
@@ -115,8 +143,10 @@ const CreateEvent: React.FC = () => {
               className="w-full border border-gray-300 p-2 rounded-md"
               required
             />
-          </div>{" "}
+          </div>
         </div>
+
+        {/* Description Input */}
         <div>
           <label htmlFor="description" className="block text-gray-700">
             Description
@@ -130,7 +160,9 @@ const CreateEvent: React.FC = () => {
             required
           />
         </div>
-        <div className="w-full flex flex-row">
+
+        {/* Action Type and Target Inputs */}
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="actionType" className="block text-gray-700">
               Action Type
@@ -164,20 +196,31 @@ const CreateEvent: React.FC = () => {
             />
           </div>
         </div>
-        {/* Optional: Add image URL field */}
-        {/* <div>
+
+        {/* Image Input */}
+        <div>
           <label htmlFor="image" className="block text-gray-700">
-            Image URL
+            Image Upload
           </label>
           <input
-            type="text"
+            type="file"
+            accept="image/*" // Specify accepted file types for images
             id="image"
             name="image"
-            value={newEvent.image}
-            onChange={handleInputChange}
+            onChange={handleFileInputChange}
             className="w-full border border-gray-300 p-2 rounded-md"
           />
-        </div> */}
+          {newEvent.image && (
+            <img
+              src={URL.createObjectURL(newEvent.image)}
+              alt="Event Preview"
+              className="mt-2 rounded-md"
+              style={{ maxWidth: "100%", maxHeight: "200px" }}
+            />
+          )}
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"

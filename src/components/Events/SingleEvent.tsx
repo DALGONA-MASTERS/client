@@ -80,7 +80,7 @@ function SingleEvent({ event }: { event: EventType }) {
       className="min-w-[300px] bg-white shadow-md rounded-md p-4 flex flex-col items-center "
     >
       <img
-        src={event.image || "https://via.placeholder.com/300x200"}
+        src={event.picture || "https://via.placeholder.com/300x200"}
         alt="Event"
         className="w-full h-32 object-cover rounded-t-md mb-2"
         onClick={() => handleEventClick(event)}
