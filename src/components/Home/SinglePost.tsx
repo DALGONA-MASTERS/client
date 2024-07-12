@@ -203,7 +203,7 @@ function SinglePost({ post }: { post: UiPost }) {
           <img
             src={post.picture}
             alt="Post Media"
-            className="max-w-[50%] max-h-[50%] rounded-md"
+            className="max-w-[90%] max-h-[50%] rounded-md"
           />
         </div>
       )}
