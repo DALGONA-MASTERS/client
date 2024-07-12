@@ -8,7 +8,7 @@ import { EventData, EventType, UpdateEventData } from '../../types/Event';
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8042/',
+        baseUrl: process.env.REACT_APP_SERVER_URL,
         prepareHeaders: (headers, { getState }) => {
             const state = getState() as RootState; // Explicitly type the getState function
 
